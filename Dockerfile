@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling AS afl-dyninst
+FROM ubuntu:18.04 AS afl-dyninst
 MAINTAINER vh@thc.org
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -8,6 +8,9 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install \
         g++ \
         make \
         cmake \
+        m4 \
+        clang \
+        llvm \
         git \
         ca-certificates \
         tar \
@@ -26,7 +29,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install \
 RUN git clone https://github.com/dyninst/dyninst \
         && cd dyninst && mkdir build && cd build \
         && cmake .. \
-        && make \
+        && make -j4 \
         && make install
 
 RUN git clone https://github.com/vanhauser-thc/AFLplusplus \
